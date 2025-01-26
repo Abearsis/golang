@@ -33,5 +33,5 @@ jobs:
     - name: Upload Go test results
       uses: actions/upload-artifact@v4
       with:
-        name: main
-        path: main${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+        name: main${{ matrix.os == '-windows-latest' || '-ubuntu-latest' }}
+        path: main${{ matrix.os == '-windows-latest' && '.exe' || '-ubuntu-latest' }}
