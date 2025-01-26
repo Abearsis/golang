@@ -12,7 +12,12 @@ on:
 jobs:
 
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
     steps:
     - uses: actions/checkout@v4
 
@@ -22,9 +27,11 @@ jobs:
         go-version: '1.23.5'
 
     - name: Build
-      run: go build -v ./...
-    - name: Upload Go test results
+      run: |
+        go build -v -o main${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./...
+
+    - name: Upload Go build artifact
       uses: actions/upload-artifact@v4
       with:
-        name: main
-        path: main.exe
+        name: main-${{ matrix.os }}
+        path: main${{ matrix.os == 'windows-latest' && '.exe' || '' }}
